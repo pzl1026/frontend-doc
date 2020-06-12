@@ -2,11 +2,25 @@
 
 ### promise
 
+### generator
+
+### set
+
+### promise和await有什么区别
+
 ## 闭包
 
 ## 设计模式
 
 ## 原生api实现
+
+### call
+
+### apply
+
+### bind
+
+### promise
 
 ## 深克隆
 

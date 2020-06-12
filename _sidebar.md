@@ -1,7 +1,7 @@
 <!-- docs/_sidebar.md -->
 
 <!-- - [Home](/) -->
-- [js](/doc/js.md)
+- [js](/doc/js.md  "The greatest guide in the world")
 - [vue](/doc/vue.md)
 - [react](/doc/react.md)
 - [webpack](/doc/webpack.md)
@@ -9,6 +9,7 @@
 - [AST](/doc/ast.md)
 - [功能方法（功能实现原理）](/doc/application.md)
 - [算法](/doc/algorithm.md)
-- [计算机网络]](/doc/net.md)
+- [计算机网络](/doc/net.md)
 - [css](/doc/css.md)
 - [面试题](/doc/audition.md)
+- [FAQ](/doc/faq.md)
