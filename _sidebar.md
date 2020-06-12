@@ -1,5 +1,6 @@
 <!-- docs/_sidebar.md -->
 
+<!-- - [Home](/) -->
 - [js](/doc/js.md)
 - [vue](/doc/vue.md)
 - [react](/doc/react.md)
