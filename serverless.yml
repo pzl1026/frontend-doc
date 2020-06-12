@@ -8,4 +8,4 @@ mydocsify:
       index: index.html
       error: index.html
     region: ap-guangzhou
-    bucketName: mqj-doc
+    bucketName: pzl-doc
