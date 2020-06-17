@@ -2,6 +2,14 @@
 
 <!-- - [Home](/) -->
 - [js](/doc/js.md  "The greatest guide in the world")
+    - [es6](/doc/js/es6.md)
+    - [设计模式](/doc/js/shejimoshi.md)
+    - [原生API的实现](/doc/js/apiFunction.md)
+    - [正则](/doc/js/exp.md)
+    - [柯里化](/doc/js/kelihua.md)
+    - [纯函数](/doc/js/chunFunction.md)
+    - [event loop](/doc/js/eventLoop.md)
+    - [深克隆](/doc/js/cloneDeep.md)
 - [vue](/doc/vue.md)
 - [react](/doc/react.md)
 - [webpack](/doc/webpack.md)
