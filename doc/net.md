@@ -33,3 +33,10 @@ for (var i = 0; i< 10; i++){
 ```
 [答案ghost](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/43)
 
+
+## http2 与 http1.1 有什么不同
+>多路复用,二进制分帧,server push, 头部压缩
+
+
+
+
