@@ -168,5 +168,33 @@ const clone = parent => {
 };
 ```
 
+## webpack热更新
+启动webpack，生成compiler实例，启动server，创建websocket；启动服务前，entry新增两个文件，一个client/index，为socket通信代码，,一个hot/index，主要是用于检查更新逻辑的，通过webpack-dev-server这个钩子，往前端发送最新的文件更新消息，告诉浏览器有文件已修改，触发两个事件，hash（更新最新一次打包后的hash值）和on事件（进行热更新检查），webpack-dev-middleware负责文件变化监听，主要是通过compiler.watch去监听，webpack里面有个hotModuleReplacementPlugin插件将需要运行的代码注入到打包后的文件，热更新的核心方法hotApply，删除需要替换的模块，将新的模块添加到modules中，通过__webpack_require__执行相关模块代码。<br>
+[链接](https://juejin.im/post/5de0cfe46fb9a071665d3df0)<br>
+![image](../assets/HRM.png)
+
+## URL到页面加载完成之后发生了什么
+解析url，比如协议头，端口，host等，开启网络线程发出一个完整的http请求，进行dns解析获取到ip，tcp/ip的请求构建，发生三次握手，四次挥手过程，客户端到服务器，会经过5层网络协议，应用层，传输层，网络层，数据链路成，物理层，通过这些层将报文数据等（比如，header，请求方式，请求参数等）信息输送到接收方，后台接收到后，会根据不同情况发送最新信息，同时会携带状态码，告诉前段是否请求成功，中间会发生混存处理，强缓存和协商缓存，通过请求过来的头去判断是哪种缓存，比如，cache-control/max-Age，expires属于强缓存,协商缓存有请求头，if-none-match/E-tag（处理秒级别以下的）, if-modified-since/last-modified（只能处理秒级别的缓存）,客户端接收到服务端的信息之后开始解析，html开始候检dom树，解析css，生成css树，之后将起合并生成render树，
+绘制render树，将各层消息发送给GPU，GPU处理渲染，渲染时发生页面的重排与回流过程，如果有js需要对文件js代码进行初始化执行。大致流程这样，还有一些其他流程比如还有一些其他流程，图片懒加载，js异步加载等。<br>
+[链接](https://zhuanlan.zhihu.com/p/34453198?group_id=957277540147056640)
 
 
+## http2.0与1的区别
+1.多路复用；即一个tcp/ip可以链接多个资源;
+2.header压缩，减少提及;
+3.二进制传输
+4.服务器端推送
+5.请求优先级
+
+## 什么是https
+在请求前，会建立ssl链接，确保接下来的通信都是加密的，无法被轻易截取分析
+
+## 前段路由的实现
+
+## vuex与redux区别
+
+## 什么是BFC
+
+## 网络攻击XSS，CSRF，如何预防
+
+## js与原生App是如何交互的
