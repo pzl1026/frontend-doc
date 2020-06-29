@@ -190,11 +190,114 @@ const clone = parent => {
 在请求前，会建立ssl链接，确保接下来的通信都是加密的，无法被轻易截取分析
 
 ## 前段路由的实现
+通过history.pushState和replaceState实现，popState监听浏览器行为[链接](https://juejin.im/post/5ac61da66fb9a028c71eae1b)
+
+## event Bus的实现（主要考点：发布订阅模式）
+[链接](https://juejin.im/post/5ac2fb886fb9a028b86e328c)
+```js
+class EventEmeitter {
+  constructor() {
+    this._events = this._events || new Map(); // 储存事件/回调键值对
+    this._maxListeners = this._maxListeners || 10; // 设立监听上限
+  }
+}
+
+// 触发名为type的事件
+
+// 触发名为type的事件
+EventEmeitter.prototype.emit = function(type, ...args) {
+  let handler;
+  handler = this._events.get(type);
+  if (Array.isArray(handler)) {
+    // 如果是一个数组说明有多个监听者,需要依次此触发里面的函数
+    for (let i = 0; i < handler.length; i++) {
+      if (args.length > 0) {
+        handler[i].apply(this, args);
+      } else {
+        handler[i].call(this);
+      }
+    }
+  } else { // 单个函数的情况我们直接触发即可
+    if (args.length > 0) {
+      handler.apply(this, args);
+    } else {
+      handler.call(this);
+    }
+  }
+
+  return true;
+};
+
+// 监听名为type的事件
+EventEmeitter.prototype.addListener = function(type, fn) {
+  const handler = this._events.get(type); // 获取对应事件名称的函数清单
+  if (!handler) {
+    this._events.set(type, fn);
+  } else if (handler && typeof handler === 'function') {
+    // 如果handler是函数说明只有一个监听者
+    this._events.set(type, [handler, fn]); // 多个监听者我们需要用数组储存
+  } else {
+    handler.push(fn); // 已经有多个监听者,那么直接往数组里push函数即可
+  }
+};
+
+
+// 监听名为type的事件
+EventEmeitter.prototype.addListener = function(type, fn) {
+  // 将type事件以及对应的fn函数放入this._events中储存
+  if (!this._events.get(type)) {
+    this._events.set(type, fn);
+  }
+};
+
+// 监听同一个事件名
+emitter.addListener('arson', man => {
+  console.log(`expel ${man}`);
+});
+emitter.addListener('arson', man => {
+  console.log(`save ${man}`);
+});
+
+emitter.addListener('arson', man => {
+  console.log(`kill ${man}`);
+});
+
+// 触发事件
+emitter.emit('arson', 'low-end');
+//expel low-end
+//save low-end
+//kill low-end
+```
 
 ## vuex与redux区别
+redux 是 flux 的一种实现，redux 不单单可以用在 react 上面。<br>
+vuex 是 redux 的基础上进行改变，对仓库的管理更加明确。<br>
+数据流向不一样，vuex 的同异步有不同的流向，而 redux 的同异步是一样的。<br>
+redux 使用的是不可变的数据，而 vuex 的数据是可变的，redux 每次修改更新数据，其实就是用新的数据替换旧的数据，而 vuex 是直接修改原数据。<br>
 
 ## 什么是BFC
+BFC（Block formatting contexts）：块级格式上下文
+页面上的一个隔离的渲染区域，那么他是如何产生的呢？可以触发BFC的元素有float、position、overflow、display：table-cell/ inline-block/table-caption ；BFC有什么作用呢？比如说实现多栏布局’
+
+IFC（Inline formatting contexts）：内联格式上下文
+IFC的line box（线框）高度由其包含行内元素中最高的实际高度计算而来（不受到竖直方向的padding/margin影响)IFC中的line box一般左右都贴紧整个IFC，但是会因为float元素而扰乱。float元素会位于IFC与与line box之间，使得line box宽度缩短。 同个ifc下的多个line box高度会不同
+IFC中时不可能有块级元素的，当插入块级元素时（如p中插入div）会产生两个匿名块与div分隔开，即产生两个IFC，每个IFC对外表现为块级元素，与div垂直排列。
+那么IFC一般有什么用呢？
+水平居中：当一个块要在环境中水平居中时，设置其为inline-block则会在外层产生IFC，通过text-align则可以使其水平居中。
+垂直居中：创建一个IFC，用其中一个元素撑开父元素的高度，然后设置其vertical-align:middle，其他行内元素则可以在此父元素下垂直居中。
+
+GFC（GrideLayout formatting contexts）：网格布局格式化上下文
+当为一个元素设置display值为grid的时候，此元素将会获得一个独立的渲染区域，我们可以通过在网格容器（grid container）上定义网格定义行（grid definition rows）和网格定义列（grid definition columns）属性各在网格项目（grid item）上定义网格行（grid row）和网格列（grid columns）为每一个网格项目（grid item）定义位置和空间。那么GFC有什么用呢，和table又有什么区别呢？首先同样是一个二维的表格，但GridLayout会有更加丰富的属性来控制行列，控制对齐以及更为精细的渲染语义和控制。
+
+FFC（Flex formatting contexts）:自适应格式上下文
+display值为flex或者inline-flex的元素将会生成自适应容器（flex container），可惜这个牛逼的属性只有谷歌和火狐支持，不过在移动端也足够了，至少safari和chrome还是OK的，毕竟这俩在移动端才是王道。Flex Box 由伸缩容器和伸缩项目组成。通过设置元素的 display 属性为 flex 或 inline-flex 可以得到一个伸缩容器。设置为 flex 的容器被渲染为一个块级元素，而设置为 inline-flex 的容器则渲染为一个行内元素。伸缩容器中的每一个子元素都是一个伸缩项目。伸缩项目可以是任意数量的。伸缩容器外和伸缩项目内的一切元素都不受影响。简单地说，Flexbox 定义了伸缩容器内伸缩项目该如何布局。
 
 ## 网络攻击XSS，CSRF，如何预防
+[链接](https://github.com/dwqs/blog/issues/68)<br>
+xss：跨站点脚本攻击，(反射类型，存储类型，基于dom)<br>
+预防：httponly防止劫持cookie；输入检查，对用户的任何输入进行检查，服务器输出检查<br>
+CSRF： 跨站请求伪造，通过劫持cookir骗取服务器信任，以受害者的名义伪造请求发送到攻击的服务器。<br>
+预防：验证码，添加token验证，使用referer check进行源检查<br>
 
 ## js与原生App是如何交互的
+
