@@ -10,6 +10,7 @@
     - [纯函数](/doc/js/chunFunction.md)
     - [event loop](/doc/js/eventLoop.md)
     - [深克隆](/doc/js/cloneDeep.md)
+    - [原型](/doc/js/prototype.md)
 - [vue](/doc/vue.md)
 - [react](/doc/react.md)
 - [webpack](/doc/webpack.md)
