@@ -304,3 +304,31 @@ CSRF： 跨站请求伪造，通过劫持cookir骗取服务器信任，以受害
 ## 前段100问
 > [https://juejin.im/post/5d23e750f265da1b855c7bbe](https://juejin.im/post/5d23e750f265da1b855c7bbe)
 
+## 前端性能优化，这些你都需要知道
+[链接](https://mp.weixin.qq.com/s/QMn651mxQAKbIZVOPF5jlA)
+
+## GET和POST的区别
+区别一
+GET重点从服务器上获取资源,POST重点向服务器发送数据.
+
+区别二
+get传输数据是通过URL请求，置于URL后，并用”?”连接，多个请求数据间用”&”连接.post传输数据通过Http的post机制，将字段与对应值封存在请求实体中发送给服务器，这个过程对用户是不可见的；
+
+区别三
+Get传输的数据量小，因为受URL长度限制，但效率较高；
+
+Post可以传输大量数据，所以上传文件时只能用Post方式；
+
+区别四
+get是不安全的，因为URL是可见的，可能会泄露私密信息，如密码等；
+
+post较get安全性较高；
+
+区别五
+get方式只能支持ASCII字符，向服务器传的中文字符可能会乱码。
+
+post支持标准字符集，可以正确传递中文字符。
+
+## webpack原理
+[链接](https://segmentfault.com/a/1190000015088834)
+
