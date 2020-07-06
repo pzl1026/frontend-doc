@@ -1,9 +1,21 @@
+# https://q.shanyue.tech/interview.html
+
 ## app如何实现与h5通信
  
 ## 介绍下 npm 模块安装机制，为什么输入 npm install 就可以自动安装对应的模块？
 [https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/22](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/22)
 
 ## 有以下 3 个判断数组的方法，请分别介绍它们之间的区别和优劣Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()
+1. Object.prototype.toString.call()<br>
+每一个继承 Object 的对象都有 toString 方法，如果 toString 方法没有重写的话，会返回 [Object type]，其中 type 为对象的类型。但当除了 Object 类型的对象外，其他类型直接使用 toString 方法时，会直接返回都是内容的字符串，所以我们需要使用call或者apply方法来改变toString方法的执行上下文。<br>
+2. instanceof<br>
+instanceof  的内部机制是通过判断对象的原型链中是不是能找到类型的 prototype。但 instanceof 只能用来判断对象类型，原始类型不可以。并且所有对象类型 instanceof Object 都是 true。<br>
+3. Array.isArray()<br>
+功能：用来判断对象是否为数组<br>
+instanceof 与 isArray<br>
+当检测Array实例时，Array.isArray 优于 instanceof ，因为 Array.isArray 可以检测出 iframes.<br>
+Array.isArray() 与 Object.prototype.toString.call():<br>
+Array.isArray()是ES5新增的方法，当不存在 Array.isArray() ，可以用 Object.prototype.toString.call() 实现。<br>
 [https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/23](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/23)
 
 ## 介绍下观察者模式和订阅-发布模式的区别，各自适用于什么场景
@@ -297,7 +309,7 @@ display值为flex或者inline-flex的元素将会生成自适应容器（flex co
 xss：跨站点脚本攻击，(反射类型，存储类型，基于dom)<br>
 预防：httponly防止劫持cookie；输入检查，对用户的任何输入进行检查，服务器输出检查<br>
 CSRF： 跨站请求伪造，通过劫持cookir骗取服务器信任，以受害者的名义伪造请求发送到攻击的服务器。<br>
-预防：验证码，添加token验证，使用referer check进行源检查<br>
+预防：验证码，添加token验证，使用referer check进行源检查（根据检查当前请求的来源Referer来判断是否是CSRF攻击）<br>
 
 ## js与原生App是如何交互的
 
@@ -336,18 +348,123 @@ post支持标准字符集，可以正确传递中文字符。
 udp:1、不会对不数据报文进行处理，直接输送；2、不仅仅支持1对1的传输，可多对多，一对多的传输；3、可靠性较差，想发就发，无需像TCP一样建立握手链接;4、头部传输小，传输高效，只有8个字节<br/>
 TCP:1、TCP提供全双工通信；2、需要建立握手链接；3、可靠性强；4，仅支持1对1传输
 
+## cdn原理
+CDN做了两件事，一是让用户访问最近的节点，二是从缓存或者源站获取资源。<br>
+用户在首次访问 https://assets-cdn.github.com/pinned-octocat.svg , 假设不委托local DNS服务器递归查询，会经历以下几个过程
+
+1.浏览器检查本地有没有这个东东的有效缓存，有则使用缓存，没有有效缓存则进行对assets-cdn.github.com的DNS查询，获得一个 CNAME记录, igithub.map.fastly.net,值得注意的是，多个加速域名可以解析到同一个CNAME，CDN回源和缓存的时候考虑到了hostname，👍；<br>
+2.进行对github.map.fastly.net的DNS查询，获得一个A/AAAA记录，给出地址103.245.222.133（视网站不同返回的不一样，可以有多个）, 这一步对CDN来说时十分重要的，它给出了离用户最近的边缘节点；<br>
+3.浏览器选一个返回的地址，然后进行真正的http请求，开始向103.245.222.133握手，握手完了把http请求头也发给了该边缘服务器;<br>
+边缘服务器检查自己的cache里面有没有https://assets-cdn.github.com/pinned-octocat.svg这个资源，有则返回给用户，如果没有，向CDN中心服务器发起请求;<br>
+4.CDN中心服务器检查自己的cache里面有没有这个资源，有则返回给边缘服务器，没有则回源;<br>
+5.中心服务器发现客户配置了github.map.fastly.net的回源地址(这个只有cdn会知道，假设是xxx.xxx.xxx.xxx)，就把http请求发到源站地址上，源站返回后返回给请求方;<br>
+![image](../assets/cdn.png)
+
+个人理解：浏览器检查本地有没有当前域名的缓存，有就使用缓存，没有就去通过dns查询获得一个记录，通过查询得到一个最近的边缘节点，，然后浏览器进行一个真正的http请求，边缘服务器铜鼓请求查看请求头的cache里面有没有当前资源，，有就返回，没有的话就把请求发到真正的资源站上，获取最新的资源。
+
+
+
+## 为什么要有reack hook的出现
+根据官方网站的描述，react动机有3点：1、使组件之间复用逻辑变得更加简单，避免代码的冗余，使代码逻辑变得更加清晰；2、将组建相关联的逻辑拆分成更小的部分，忽略了生命周期的操作，但又遵循了原则，易于代码维护；3、避免了使用class去生成组件，通过函数的方式生成组件，使函数组件在非class的情况下也可以拥有更多的react特性
+
+## 跨域时如何处理cookie
+前端加上配置：<br>
+xhrFields: {
+        withCredentials: true 
+},<br>
+服务端加上配置：<br>
+header('Access-Control-Allow-Credentials: true');<br>
+
+## 箭头函数与手写函数的区别
+1. 箭头函数没有prototype(原型)，所以箭头函数本身没有this
+2. 箭头函数的this指向在定义的时候继承自外层第一个普通函数的this。
+3. 不能直接修改箭头函数的this指向
+4. 没有自己的arguments
+5. 因为没有this，不能生成构造函数
+
+## 什么是JWT
+JSON Web Token（简称 JWT）是目前最流行的跨域认证解决方案。<br>
+是一种认证授权机制。<br>
+JWT 认证流程：<br>
+用户输入用户名/密码登录，服务端认证成功后，会返回给客户端一个 JWT<br>
+客户端将 token 保存到本地（通常使用 localstorage，也可以使用 cookie）<br>
+当用户希望访问一个受保护的路由或者资源的时候，需要请求头的 Authorization 字段中使用Bearer 模式添加 JWT，其内容看起来是下面这样<br>
+
+作者：秋天不落叶
+链接：https://juejin.im/post/5e055d9ef265da33997a42cc
+来源：掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+## Token 和 JWT 的区别
+相同：<br>
+
+都是访问资源的令牌<br>
+都可以记录用户的信息<br>
+都是使服务端无状态化<br>
+都是只有验证成功后，客户端才能访问服务端上受保护的资源<br>
+
+区别：<br>
+
+Token：服务端验证客户端发送过来的 Token 时，还需要查询数据库获取用户信息，然后验证 Token 是否有效。<br>
+JWT： 将 Token 和 Payload 加密后存储于客户端，服务端只需要使用密钥解密进行校验（校验也是 JWT 自己实现的）即可，不需要查询或者减少查询数据库，因为 JWT 自包含了用户信息和加密的数据。<br>
+
+## 事件循环
+宏任务：<br>
+script(整体代码)；
+setTimeout；
+setInterval；
+setImmediate；
+I/O；
+UI render；<br>
+微任务：<br>
+process.nextTick;
+Promise;
+Async/Await(实际就是promise);
+MutationObserver(html5新特性);<br>
+
+node 和 浏览器 eventLoop的主要区别：<br>
+两者最主要的区别在于浏览器中的微任务是在每个相应的宏任务中执行的，而nodejs中的微任务是在不同阶段之间执行的。<br>
+https://juejin.im/post/5e5c7f6c518825491b11ce93
+
+## promise、async await、Generator的区别
+async 基于promise写的，代码书写方式看起来是同步的，generator需要执行next才可以执行到下一步
+
+## es5与es6继承区别
+ES5 的继承，实质是先创造子类的实例对象this，然后再将父类的方法添加到this上面（Parent.apply(this)）。<br>
+ES6 的继承机制完全不同，实质是先将父类实例对象的属性和方法，加到this上面（所以必须先调用super方法）
+，然后再用子类的构造函数修改this。
+
+## js模块化（commonjs/AMD/CMD/ES6）
+commonjs： require方式，nodejs推荐的方式；<br>
+AMD： requirejs， 依赖前置；<br>
+CMD：Seajs，依赖就近；<br>
+ES6 module: exports/import <br>
+commonjs与es6 module区别：<br>
+CommonJS 加载的是一个对象（即module.exports属性），该对象只有在脚本运行完才会生成。而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。<br>
+https://juejin.im/post/5aaa37c8f265da23945f365c
+
+
 ## http状态码
 
 ## cache-control有哪些值，分别干嘛的
 
 ## 浏览器缓存机制
 
-## cdn原理
-
 ## 加密？
 
-## 为什么要有reack hook的出现
-根据官方网站的描述，react动机有3点：1、使组件之间复用逻辑变得更加简单，避免代码的冗余，使代码逻辑变得更加清晰；2、将组建相关联的逻辑拆分成更小的部分，忽略了生命周期的操作，但又遵循了原则，易于代码维护；3、避免了使用class去生成组件，通过函数的方式生成组件，使函数组件在非class的情况下也可以拥有更多的react特性
+## 实现一个promise
+
+## 实现一个图片懒加载
+
+## 实现一个v-model
+
+## 手写ajax
+
+## 继承
+
+## 单例模式
+
+ 
 
 
 
