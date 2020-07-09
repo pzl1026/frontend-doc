@@ -618,6 +618,18 @@ https://segmentfault.com/a/1190000006778717
 
 ## 进程与线程
 https://juejin.im/post/5d43017be51d4561f40adcf9
+
+## 项目中笛卡尔沉积，加乘法所遇到的坑，怎么解决的
+
+## 排序，冒泡排序，快速排序
+
+## vue nextTick原理
+
+## new的过成功发生了什么
+创建了一个函数
+创建了一个object对象
+将函数的prototype赋值给已经创建好的object对象的__proto__,
+最后将函数的指向object
  
  
 
