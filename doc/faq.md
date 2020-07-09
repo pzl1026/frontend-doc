@@ -24,8 +24,13 @@ Array.isArray()是ES5新增的方法，当不存在 Array.isArray() ，可以用
 >观察者模式大多数时候是同步的，比如当事件触发，Subject就会去调用观察者的方法。而发布-订阅模式大多数时候是异步的（使用消息队列）。<br/>
 >观察者 模式需要在单个应用程序地址空间中实现，而发布-订阅更像交叉应用模式。
 
+
 ## 说说浏览器和 Node 事件循环的区别 
-[https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/26](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/26)
+[https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/26](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/26)<br/>
+https://juejin.im/post/5c337ae06fb9a049bc4cd218#heading-12<br/>
+浏览器执行顺序：<br/>
+当某个宏任务执行完后,会查看是否有微任务队列。如果有，先执行微任务队列中的所有任务，如果没有，会读取宏任务队列中排在最前的任务，执行宏任务的过程中，遇到微任务，依次加入微任务队列。栈空后，再次读取微任务队列里的任务，依次类推。<br/>
+浏览器环境下，microtask的任务队列是每个macrotask执行完之后执行。而在Node.js中，microtask会在事件循环的各个阶段之间执行，也就是一个阶段执行完毕，就会去执行microtask队列的任务。
 ```js
 // 例子说明
 function test () {
@@ -63,10 +68,68 @@ test()
 // children3-1
 ```
 
-## 介绍模块化发展历程
+## 介绍模块化发展历程模块化主要是用来抽离公共代码，隔离作用域，避免变量冲突等。
+
+IIFE： 使用自执行函数来编写模块化，特点：在一个单独的函数作用域中执行代码，避免变量冲突。 <br>
+```js
+(function(){
+  return {
+	data:[]
+  }
+})()
+```
+AMD： 使用requireJS 来编写模块化，特点：依赖必须提前声明好。
+```js
+define('./index.js',function(code){
+	// code 就是index.js 返回的内容
+}) 
+```
+CMD： 使用seaJS 来编写模块化，特点：支持动态引入依赖文件。
+ ```js
+define(function(require, exports, module) {  
+  var indexCode = require('./index.js'); <br>
+});
+```
+CommonJS： nodejs 中自带的模块化。 <br>
+```js
+var fs = require('fs');
+```
+UMD：兼容AMD，CommonJS 模块化语法。 <br>
+webpack(require.ensure)：webpack 2.x 版本中的代码分割。 <br>
+
+ES Modules： ES6 引入的模块化，支持import 来引入另一个 js 。 <br>
+```js
+import a from 'a';
+```
 [https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/28](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/28)
 
 ## 浏览器缓存读取规则
+四种缓存方式：
+1.service worker: Service Worker 的缓存与浏览器其他内建的缓存机制不同，它可以让我们自由控制缓存哪些文件、如何匹配缓存、如何读取缓存，并且缓存是持续性的。<br>
+2.Memory Cache: 内存中缓存，读取速度快，但是存储有限，通常用的prefetch就是利用了这个缓存<br>
+3.disk cache: 硬盘中的缓存，读取速度较慢，但是存储容量较大，一般用于大文件存储<br>
+4.push cache:推送缓存，一般以上三种缓存都没命中才会被使用，一般在谷歌浏览器缓存只有5分钟左右，所缓存的数据只能被使用一次，一旦链接被关闭，该缓存就被释放了。<br>
+一般缓存策略有两种，一种强缓存，一种协商缓存
+强缓存；资源一般来自disk cache和memory cache，强缓存通过头expire和cache-control实现
+#### 强缓存：<br>
+expires：受限于本地时间，如果修改了本地时间，可能造成缓存失效；<br>
+cache-control： <br>
+  public：所有内容都将被缓存（客户端和代理服务器都可缓存）<br>
+  private：所有内容只有客户端可以缓存<br>
+  no-cache：客户端缓存内容，是否使用缓存则需要经过协商缓存来验证决定。<br>
+  no-store：所有内容都不会被缓存，即不使用强制缓存，也不使用协商缓存<br>
+  max-age：max-age=xxx (xxx is numeric)表示缓存内容将在xxx秒后失效<br>
+  Cache-Control优先级高于Expires<br>
+#### 协商缓存：<br>
+1.Last-Modified和If-Modified-Since<br>
+弊端：如果本地打开缓存文件，即使没有对文件进行修改，但还是会造成 Last-Modified 被修改，服务端不能命中缓存导致发送相同的资源<br>
+因为 Last-Modified 只能以秒计时，如果在不可感知的时间内修改完成文件，那么服务端会认为资源还是命中了，不会返回正确的资源<br>
+2.ETag和If-None-Match<br>
+Etag是服务器响应请求时，返回当前资源文件的一个唯一标识(由服务器生成)，只要资源有变化，Etag就会重新生成<br>
+两者之间对比：<br>
+1.先在精确度上，Etag要优于Last-Modified。<br>
+2.第二在性能上，Etag要逊于Last-Modified，毕竟Last-Modified只需要记录时间，而Etag需要服务器通过算法来计算出一个hash值。<br>
+3.第三在优先级上，服务器校验优先考虑Etag<br>
 [https://www.jianshu.com/p/54cc04190252](https://www.jianshu.com/p/54cc04190252)
 
 ## react15与16的区别
@@ -181,25 +244,40 @@ const clone = parent => {
 ```
 
 ## webpack热更新
-启动webpack，生成compiler实例，启动server，创建websocket；启动服务前，entry新增两个文件，一个client/index，为socket通信代码，,一个hot/index，主要是用于检查更新逻辑的，通过webpack-dev-server这个钩子，往前端发送最新的文件更新消息，告诉浏览器有文件已修改，触发两个事件，hash（更新最新一次打包后的hash值）和on事件（进行热更新检查），webpack-dev-middleware负责文件变化监听，主要是通过compiler.watch去监听，webpack里面有个hotModuleReplacementPlugin插件将需要运行的代码注入到打包后的文件，热更新的核心方法hotApply，删除需要替换的模块，将新的模块添加到modules中，通过__webpack_require__执行相关模块代码。<br>
+启动webpack，生成compiler实例，启动server，创建websocket；启动服务前，entry新增两个文件，一个client/index，为socket通信代码，,一个hot/dev_server.js，主要是用于检查更新逻辑的，通过webpack-dev-server这个钩子，往前端发送最新的文件更新消息，告诉浏览器有文件已修改，触发两个事件，hash（更新最新一次打包后的hash值）和on事件（进行热更新检查），webpack-dev-middleware负责文件变化监听，主要是通过compiler.watch去监听，出发事件，客户端接收到新的hash会进行jsonp请求新的资源，新的请求资源请求到之后，hotModuleReplacementPlugin插件将需要新的运行的代码注入到打包后的文件，热更新的核心方法hotApply，删除需要替换的模块，将新的模块添加到modules中，通过__webpack_require__执行相关模块代码。<br>
 [链接](https://juejin.im/post/5de0cfe46fb9a071665d3df0)<br>
+https://zhuanlan.zhihu.com/p/30669007
 ![image](../assets/HRM.png)
 
 ## URL到页面加载完成之后发生了什么
-解析url，比如协议头，端口，host等，开启网络线程发出一个完整的http请求，进行dns解析获取到ip，tcp/ip的请求构建，发生三次握手，四次挥手过程，客户端到服务器，会经过5层网络协议，应用层，传输层，网络层，数据链路成，物理层，通过这些层将报文数据等（比如，header，请求方式，请求参数等）信息输送到接收方，后台接收到后，会根据不同情况发送最新信息，同时会携带状态码，告诉前段是否请求成功，中间会发生混存处理，强缓存和协商缓存，通过请求过来的头去判断是哪种缓存，比如，cache-control/max-Age，expires属于强缓存,协商缓存有请求头，if-none-match/E-tag（处理秒级别以下的）, if-modified-since/last-modified（只能处理秒级别的缓存）,客户端接收到服务端的信息之后开始解析，html开始候检dom树，解析css，生成css树，之后将起合并生成render树，
+解析url，比如协议头，端口，host等，开启网络线程发出一个完整的http请求，进行dns解析(可以说下dns解析)获取到ip，tcp/ip的请求构建，发生三次握手，四次挥手过程（可详细说下怎么个过程），客户端到服务器，会经过5层网络协议，应用层，传输层，网络层，数据链路成，物理层，通过这些层将报文数据等（比如，header，请求方式，请求参数等）信息输送到接收方，后台接收到后，会根据不同情况发送最新信息，同时会携带状态码，告诉前段是否请求成功，中间会发生混存处理，强缓存和协商缓存，通过请求过来的头去判断是哪种缓存，比如，cache-control/max-Age，expires属于强缓存,协商缓存有请求头，if-none-match/E-tag（处理秒级别以下的）, if-modified-since/last-modified（只能处理秒级别的缓存）（可详述浏览器缓存机制）,客户端接收到服务端的信息之后开始解析，html开始生成dom树，解析css，生成css树，之后将起合并生成render树，
 绘制render树，将各层消息发送给GPU，GPU处理渲染，渲染时发生页面的重排与回流过程，如果有js需要对文件js代码进行初始化执行。大致流程这样，还有一些其他流程比如还有一些其他流程，图片懒加载，js异步加载等。<br>
 [链接](https://zhuanlan.zhihu.com/p/34453198?group_id=957277540147056640)
 
 
 ## http2.0与1的区别
-1.多路复用；即一个tcp/ip可以链接多个资源;
-2.header压缩，减少提及;
-3.二进制传输
-4.服务器端推送
-5.请求优先级
+1.多路复用；即一个tcp/ip可以链接多个资源;<br>
+2.header压缩，减少体积;<br>
+3.二进制传输<br>
+4.服务器端推送<br>
+5.请求优先级<br>
+
+## 相对于HTTP1.0，HTTP1.1的优化：<br>
+缓存处理：多了Entity tag，If-Unmodified-Since, If-Match, If-None-Match等缓存信息（HTTTP1.0 If-Modified-Since,Expires）<br>
+带宽优化及网络连接的使用<br>
+错误通知的管理<br>
+Host头处理<br>
+长连接： HTTP1.1中默认开启Connection： keep-alive，一定程度上弥补了HTTP1.0每次请求都要创建连接的缺点。<br>
 
 ## 什么是https
-在请求前，会建立ssl链接，确保接下来的通信都是加密的，无法被轻易截取分析
+在请求前，会建立ssl链接，确保接下来的通信都是加密的，无法被轻易截取分析<br>
+主要使用了，对称加密和非对称加密<br>
+数字证书认证机构（Certificate Authority，简称 CA）生成一对公/私钥；<br>
+服务器将自己的域名、公钥等信息提交给 CA 审查；<br>
+CA 审查无误，使用私钥把服务器信息的摘要加密，生成的密文就是所谓签名（Signature）；<br>
+CA 把服务器的信息、签名、有效期等信息集合到一张证书上，颁发给服务器；<br>
+客户端收到服务器发送的证书后，使用 CA 的公钥解密签名，获得服务器信息的摘要，如果和证书上记录的服务器信息的摘要一致，说明服务器信息是经过 CA 认可的<br>
+https://juejin.im/post/592d23630ce46300579882b4
 
 ## 前段路由的实现
 通过history.pushState和replaceState实现，popState监听浏览器行为[链接](https://juejin.im/post/5ac61da66fb9a028c71eae1b)
@@ -213,8 +291,6 @@ class EventEmeitter {
     this._maxListeners = this._maxListeners || 10; // 设立监听上限
   }
 }
-
-// 触发名为type的事件
 
 // 触发名为type的事件
 EventEmeitter.prototype.emit = function(type, ...args) {
@@ -311,8 +387,6 @@ xss：跨站点脚本攻击，(反射类型，存储类型，基于dom)<br>
 CSRF： 跨站请求伪造，通过劫持cookir骗取服务器信任，以受害者的名义伪造请求发送到攻击的服务器。<br>
 预防：验证码，添加token验证，使用referer check进行源检查（根据检查当前请求的来源Referer来判断是否是CSRF攻击）<br>
 
-## js与原生App是如何交互的
-
 ## 前段100问
 > [https://juejin.im/post/5d23e750f265da1b855c7bbe](https://juejin.im/post/5d23e750f265da1b855c7bbe)
 
@@ -362,8 +436,6 @@ CDN做了两件事，一是让用户访问最近的节点，二是从缓存或�
 
 个人理解：浏览器检查本地有没有当前域名的缓存，有就使用缓存，没有就去通过dns查询获得一个记录，通过查询得到一个最近的边缘节点，，然后浏览器进行一个真正的http请求，边缘服务器铜鼓请求查看请求头的cache里面有没有当前资源，，有就返回，没有的话就把请求发到真正的资源站上，获取最新的资源。
 
-
-
 ## 为什么要有reack hook的出现
 根据官方网站的描述，react动机有3点：1、使组件之间复用逻辑变得更加简单，避免代码的冗余，使代码逻辑变得更加清晰；2、将组建相关联的逻辑拆分成更小的部分，忽略了生命周期的操作，但又遵循了原则，易于代码维护；3、避免了使用class去生成组件，通过函数的方式生成组件，使函数组件在非class的情况下也可以拥有更多的react特性
 
@@ -390,10 +462,7 @@ JWT 认证流程：<br>
 客户端将 token 保存到本地（通常使用 localstorage，也可以使用 cookie）<br>
 当用户希望访问一个受保护的路由或者资源的时候，需要请求头的 Authorization 字段中使用Bearer 模式添加 JWT，其内容看起来是下面这样<br>
 
-作者：秋天不落叶
-链接：https://juejin.im/post/5e055d9ef265da33997a42cc
-来源：掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+https://juejin.im/post/5e055d9ef265da33997a42cc
 
 ## Token 和 JWT 的区别
 相同：<br>
@@ -407,6 +476,10 @@ JWT 认证流程：<br>
 
 Token：服务端验证客户端发送过来的 Token 时，还需要查询数据库获取用户信息，然后验证 Token 是否有效。<br>
 JWT： 将 Token 和 Payload 加密后存储于客户端，服务端只需要使用密钥解密进行校验（校验也是 JWT 自己实现的）即可，不需要查询或者减少查询数据库，因为 JWT 自包含了用户信息和加密的数据。<br>
+
+## JWT缺点
+1.存储信息多，占用带宽大，流量大，
+2.时间有效期内很难被注销
 
 ## 事件循环
 宏任务：<br>
@@ -443,20 +516,82 @@ commonjs与es6 module区别：<br>
 CommonJS 加载的是一个对象（即module.exports属性），该对象只有在脚本运行完才会生成。而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。<br>
 https://juejin.im/post/5aaa37c8f265da23945f365c
 
+## webpack plugin与loader的区别
+
+## 首屏优化
+减少请求，使用cdn分发，ssr渲染，图片资源等进行压缩，js异步加载，骨架屏等。。。。
+
+## CI/CD流程
+https://blog.csdn.net/wang725/article/details/90582573
+CI/CD实践<br>
+
+在gitlab上定义WebHooc事件，若发生push到GitLab操作，则触发Jenkins的Job<br>
+Jenkins从GitLab拉取代码，静态分析，启动服务，单元测试，构建镜像，推送到Docker仓库：Harbor仓库等动作<br>
+docker build<br>
+docker push<br>
+在同一个Jenkins的pipeline中，docker push之后，定义一个新的stage用以发布服务，kubectl set image deployments/xxx xxx=imageName<br>
+
+## SSR对性能优化的提升在哪里
+https://segmentfault.com/a/1190000022257834
+
+## DNS解析流程
+https://juejin.im/post/5cc5421e5188252e761e7e12#heading-14 （包括其他网络面试题）
+
+## 能说说首屏加载优化有哪些方案么
+Vue-Router路由懒加载（利用Webpack的代码切割）<br>
+使用CDN加速，将通用的库从vendor进行抽离<br>
+Nginx的gzip压缩<br>
+Vue异步组件<br>
+服务端渲染SSR<br>
+如果使用了一些UI库，采用按需加载<br>
+Webpack开启gzip压缩<br>
+如果首屏为登录页，可以做成多入口<br>
+Service Worker缓存文件处理<br>
+使用link标签的rel属性设置   prefetch（这段资源将会在未来某个导航或者功能要用到，但是本资源的下载顺序权重比较低，prefetch通常用于加速下一次导航）、preload（preload将会把资源得下载顺序权重提高，使得关键数据提前下载好，优化页面打开速度）<br>
+https://juejin.im/post/5d690c726fb9a06b155dd40d
+
+
+## 阿里面试题
+https://juejin.im/post/5d690c726fb9a06b155dd40d#heading-36
+
+## 深克隆
+https://juejin.im/post/5d6aa4f96fb9a06b112ad5b1#heading-5
+
+## 图片懒加载
+```js
+   var num = document.getElementsByTagName('img').length;
+    var img = document.getElementsByTagName("img");
+    var n = 0; //存储图片加载到的位置，避免每次都从第一张图片开始遍历
+
+    lazyload(); //页面载入完毕加载可是区域内的图片
+
+    window.onscroll = lazyload;
+
+    function lazyload() { //监听页面滚动事件
+        var seeHeight = document.documentElement.clientHeight; //可见区域高度
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop; //滚动条距离顶部高度
+        for (var i = n; i < num; i++) {
+            if (img[i].offsetTop < seeHeight + scrollTop) {
+                if (img[i].getAttribute("src") == "default.jpg") {
+                    img[i].src = img[i].getAttribute("data-src");
+                }
+                n = i + 1;
+            }
+        }
+    }
+```
 
 ## http状态码
 
-## cache-control有哪些值，分别干嘛的
-
 ## 浏览器缓存机制
 
-## 加密？
+## http为什么安全？
 
-## 实现一个promise
+## 实现一个promise（ok）
 
-## 实现一个图片懒加载
+## 实现一个图片懒加载（ok）
 
-## 实现一个v-model
+## 实现一个v-model（ok）
 
 ## 手写ajax
 
@@ -464,6 +599,26 @@ https://juejin.im/post/5aaa37c8f265da23945f365c
 
 ## 单例模式
 
+## react diff做了哪些优化
+
+## 什么是闭包？
+闭包是指有权访问另外一个函数作用域中的变量的函数。
+
+使用闭包的注意点<br>
+（1）由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。<br>
+（2）闭包会在父函数外部，改变父函数内部变量的值。所以，如果你把父函数当作对象（object）使用，把闭包当作它的公用方法（Public Method），把内部变量当作它的私有属性（private value），这时一定要小心，不要随便改变父函数内部变量的值。<br>
+
+## js为什么是单线程的？
+主要是js主要用于用户的交互处理，单线程更方便，如果是多线程可能导致交互混乱，，就算是web worker也是伪多线程的，而且还不能操作dom。
+
+## async和defer的区别
+async：异步加载资源，且加载完js资源立即执行，并不会按顺序执行，谁快谁先执行；<br>
+defer：异步加载资源，在dom渲染后在执行<br>
+https://segmentfault.com/a/1190000006778717
+
+## 进程与线程
+https://juejin.im/post/5d43017be51d4561f40adcf9
+ 
  
 
 
