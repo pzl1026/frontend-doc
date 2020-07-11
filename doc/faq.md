@@ -596,6 +596,7 @@ https://juejin.im/post/5d6aa4f96fb9a06b112ad5b1#heading-5
 ## 手写ajax
 
 ## 继承
+https://juejin.im/post/58f94c9bb123db411953691b
 
 ## 单例模式
 
@@ -627,9 +628,11 @@ https://juejin.im/post/5d43017be51d4561f40adcf9
 
 ## new的过成功发生了什么
 创建了一个函数
-创建了一个object对象
+new了一个object对象
 将函数的prototype赋值给已经创建好的object对象的__proto__,
 最后将函数的指向object
+
+## 函数试编程
  
  
 
