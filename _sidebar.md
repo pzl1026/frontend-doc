@@ -1,7 +1,7 @@
 <!-- docs/_sidebar.md -->
 
 <!-- - [Home](/) -->
-- [js](/doc/js.md  "The greatest guide in the world")
+<!-- - [js](/doc/js.md  "The greatest guide in the world")
     - [es6](/doc/js/es6.md)
     - [设计模式](/doc/js/shejimoshi.md)
     - [原生API的实现](/doc/js/apiFunction.md)
@@ -18,7 +18,10 @@
 - [AST](/doc/ast.md)
 - [功能方法（功能实现原理）](/doc/application.md)
 - [算法](/doc/algorithm.md)
-- [计算机网络](/doc/net.md)
+- [计算机网络](/doc/net.md) -->
+- [面经](/doc/faq.md)
+- [vue](/doc/vue.md)
+- [react](/doc/react.md)
+- [手写题](/doc/write.md)
 - [css](/doc/css.md)
-- [面试题](/doc/audition.md)
-- [FAQ](/doc/faq.md)
+- [js](/doc/js.md)

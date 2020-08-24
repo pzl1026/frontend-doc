@@ -23,7 +23,7 @@
         subMaxLevel: 3,
         loadNavbar: true,
         repo: "https://github.com/pzl1026/frontend-doc",
-        homepage: "/doc/faq.md",
+        homepage: "/",
         // basePath: "https://docsify.js.org/",
         // auto2top: true,
         // coverpage: true,
@@ -31,133 +31,6 @@
         logo:
           "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1590300248295&di=100f20e6b68a8e7dc399428f8af92efe&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F14%2F75%2F01300000164186121366756803686.jpg",
       };
-//       var a = 10;
-// (function () {
-//     console.log(a)
-//     a = 5
-//     console.log(window.a)
-//     var a = 20;
-//     console.log(a)
-// })()
-// var s = '<meta charset="utf-8">';  //待过滤的表单提交信息
-// var r = /\'|\"|\<|\>/gi;  //过滤敏感字符的正则表达式
-// function f(a,b) {  //替换函数
-//   console.log(a, b, 'hhhh')
-//     ////把敏感字符替换为对应的网页显示的编码格式
-//     return "&#" + arguments[0].charCodeAt(0) + ";";
-// }
-// var a =s.replace(r,f);  //执行过滤替换 
-// document.write(a);  //在网页中显示正常的字符信息
-// console.log(a);
-let b = 'aaaaaa${s}aaaa';
-console.log(99)
-let c1 = {
-  s: 1000
-}
-b = b.replace(/\$\{(.*)\}/g, function(a,b,c, d) {
-  console.log(a, b,c, d)
-  console.log(RegExp.$1, '88')
-  // console.log(c[RegExp.$1], a, b);
-  return c1[b];
-  // console.log(a,b, 'jjhhhh')
-});
-// b = b.replace(/\$\{(.*)\}/g, '$& 999');
-console.log(b, 'ddd2')
-
-let o = [
-        {
-          name: 'a',
-          relationship: {
-              name: 'b',
-              relationship: 'f'
-          }
-        },
-        {
-          name: 'b',
-          relationship: 'f'
-        },
-        {
-          name: 'c',
-          relationship: [
-              {
-                  name: 'f',
-                  relationship: {
-                      name: 'b',
-                      relationship: [
-                        {
-                          name: 'i',
-                          relationship: 'j'
-                        }
-                      ]
-                  }
-              },
-              {
-                  name: 'a',
-                  relationship: {
-                      name: 'b',
-                      relationship: 'g'
-                      // relationship: [
-                      //   {
-                      //     name: 'g',
-                      //     relationship: 'h'
-                      //   }
-                      // ]
-                  }
-              }
-          ]
-        }
-      ];
-
-    function getR(o) {
-      let arr = {};
-      function loopO (o1, k, ar = arr) {
-        for(let j in o1){
-          if (j == 'name') {
-            if (Object.prototype.toString.call(ar) == '[object Array]') {
-              ar.push(o1[j])
-            } else {
-              ar[k].push(o1[j])
-            }
-          }
-          
-          if (j == 'relationship') {
-            if (Object.prototype.toString.call(o1[j]) == '[object Array]') {
-              let e = {};
-              e[o1.name] = [];
-              arr[k].push(e);
-              kk(o1[j], 0, k,  e[o1.name]);
-            }
-            if (Object.prototype.toString.call(o1[j]) == '[object Object]') {
-              let e = {};
-              e[o1.name] = [o1.name];
-              arr[k].push(e);
-              loopO(o1[j], k, e[o1.name])
-            }
-            if (Object.prototype.toString.call(o1[j]) == '[object String]') {
-              if (Object.prototype.toString.call(ar) == '[object Array]') {
-                ar.push(o1[j])
-              } else {
-                ar[k].push(o1[j])
-              }
-            }
-          }
-        }
-      }
-      function kk(re, isFirst, k, ar) {
-        console.log(re, 're')
-        for(let i = 0; i < re.length; i++ ) {
-          let key = re[i].name;
-          if(isFirst){
-            arr[key] = [];
-          }
-          loopO(re[i], k || key, ar || arr);
-        }
-      }
-      kk(o, 1)
-      
-      return arr;
-    }
-    console.log(getR(o), 'hhhh')
     </script>
     <script src="//cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
     <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script> -->

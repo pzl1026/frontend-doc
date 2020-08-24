@@ -1,9 +1,9 @@
-# https://q.shanyue.tech/interview.html
+<!-- # https://q.shanyue.tech/interview.html -->
 
-## app如何实现与h5通信
+<!-- ## app如何实现与h5通信 -->
  
-## 介绍下 npm 模块安装机制，为什么输入 npm install 就可以自动安装对应的模块？
-[https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/22](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/22)
+<!-- ## 介绍下 npm 模块安装机制，为什么输入 npm install 就可以自动安装对应的模块？
+[https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/22](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/22) -->
 
 ## 有以下 3 个判断数组的方法，请分别介绍它们之间的区别和优劣Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()
 1. Object.prototype.toString.call()<br>
@@ -18,6 +18,10 @@ Array.isArray() 与 Object.prototype.toString.call():<br>
 Array.isArray()是ES5新增的方法，当不存在 Array.isArray() ，可以用 Object.prototype.toString.call() 实现。<br>
 [https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/23](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/23)
 
+## call的性能为什么比apply好
+call 方法比 apply 快的原因是 call 方法的参数格式正是内部方法所需要的格式。
+https://www.jianshu.com/p/7c797a565f14
+
 ## 介绍下观察者模式和订阅-发布模式的区别，各自适用于什么场景
 >在观察者模式中，观察者是知道Subject的，Subject一直保持对观察者进行记录。然而，在发布订阅模式中，发布者和订阅者不知道对方的存在。它们只有通过消息代理进行通信。<br/>
 >在发布订阅模式中，组件是松散耦合的，正好和观察者模式相反。<br/>
@@ -25,7 +29,7 @@ Array.isArray()是ES5新增的方法，当不存在 Array.isArray() ，可以用
 >观察者 模式需要在单个应用程序地址空间中实现，而发布-订阅更像交叉应用模式。
 
 
-## 说说浏览器和 Node 事件循环的区别 
+## ***说说浏览器和 Node 事件循环的区别 
 [https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/26](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/26)<br/>
 https://juejin.im/post/5c337ae06fb9a049bc4cd218#heading-12<br/>
 浏览器执行顺序：<br/>
@@ -146,9 +150,13 @@ parseInt（string,radix）:将字符串解析转化为数字类型,返回的是�
 Number（object）:将对象的值转换为数字；
 
 ## proxy, reflect 与 object区别
->proxy,reflect为object提供了新的api，<br>
+<!-- >proxy,reflect为object提供了新的api，<br>
 >proxy可以进行更多的拦截处理，高达13种，<br>
->reflect修改某些Object方法的返回结果，让其变得更合理；让Object操作都变成函数行为
+>reflect修改某些Object方法的返回结果，让其变得更合理；让Object操作都变成函数行为 -->
+
+简单总结一下两者的区别<br>
+1.Object.defineProperty 拦截的是对象的属性，会改变原对象。proxy 是拦截整个对象，通过 new 生成一个新对象，不会改变原对象。<br>
+2.proxy 的拦截方式，除了上面的 get 和 set ，还有 11 种。选择的方式很多 Proxy，也可以监听一些 Object.defineProperty 监听不到的操作，比如监听数组，监听对象属性的新增，删除等。<br>
 
 ## vue与react区别
 > Vue 通过 getter/setter 以及一些函数的劫持，能精确知道数据变化，不需要特别的优化就能达到很好的性能<br>
@@ -243,11 +251,7 @@ const clone = parent => {
 };
 ```
 
-## webpack热更新
-启动webpack，生成compiler实例，启动server，创建websocket；启动服务前，entry新增两个文件，一个client/index，为socket通信代码，,一个hot/dev_server.js，主要是用于检查更新逻辑的，通过webpack-dev-server这个钩子，往前端发送最新的文件更新消息，告诉浏览器有文件已修改，触发两个事件，hash（更新最新一次打包后的hash值）和on事件（进行热更新检查），webpack-dev-middleware负责文件变化监听，主要是通过compiler.watch去监听，出发事件，客户端接收到新的hash会进行jsonp请求新的资源，新的请求资源请求到之后，hotModuleReplacementPlugin插件将需要新的运行的代码注入到打包后的文件，热更新的核心方法hotApply，删除需要替换的模块，将新的模块添加到modules中，通过__webpack_require__执行相关模块代码。<br>
-[链接](https://juejin.im/post/5de0cfe46fb9a071665d3df0)<br>
-https://zhuanlan.zhihu.com/p/30669007
-![image](../assets/HRM.png)
+
 
 ## URL到页面加载完成之后发生了什么
 解析url，比如协议头，端口，host等，开启网络线程发出一个完整的http请求，进行dns解析(可以说下dns解析)获取到ip，tcp/ip的请求构建，发生三次握手，四次挥手过程（可详细说下怎么个过程），客户端到服务器，会经过5层网络协议，应用层，传输层，网络层，数据链路成，物理层，通过这些层将报文数据等（比如，header，请求方式，请求参数等）信息输送到接收方，后台接收到后，会根据不同情况发送最新信息，同时会携带状态码，告诉前段是否请求成功，中间会发生混存处理，强缓存和协商缓存，通过请求过来的头去判断是哪种缓存，比如，cache-control/max-Age，expires属于强缓存,协商缓存有请求头，if-none-match/E-tag（处理秒级别以下的）, if-modified-since/last-modified（只能处理秒级别的缓存）（可详述浏览器缓存机制）,客户端接收到服务端的信息之后开始解析，html开始生成dom树，解析css，生成css树，之后将起合并生成render树，
@@ -269,15 +273,7 @@ https://zhuanlan.zhihu.com/p/30669007
 Host头处理<br>
 长连接： HTTP1.1中默认开启Connection： keep-alive，一定程度上弥补了HTTP1.0每次请求都要创建连接的缺点。<br>
 
-## 什么是https
-在请求前，会建立ssl链接，确保接下来的通信都是加密的，无法被轻易截取分析<br>
-主要使用了，对称加密和非对称加密<br>
-数字证书认证机构（Certificate Authority，简称 CA）生成一对公/私钥；<br>
-服务器将自己的域名、公钥等信息提交给 CA 审查；<br>
-CA 审查无误，使用私钥把服务器信息的摘要加密，生成的密文就是所谓签名（Signature）；<br>
-CA 把服务器的信息、签名、有效期等信息集合到一张证书上，颁发给服务器；<br>
-客户端收到服务器发送的证书后，使用 CA 的公钥解密签名，获得服务器信息的摘要，如果和证书上记录的服务器信息的摘要一致，说明服务器信息是经过 CA 认可的<br>
-https://juejin.im/post/592d23630ce46300579882b4
+
 
 ## 前段路由的实现
 通过history.pushState和replaceState实现，popState监听浏览器行为[链接](https://juejin.im/post/5ac61da66fb9a028c71eae1b)
@@ -384,7 +380,7 @@ display值为flex或者inline-flex的元素将会生成自适应容器（flex co
 [链接](https://github.com/dwqs/blog/issues/68)<br>
 xss：跨站点脚本攻击，(反射类型，存储类型，基于dom)<br>
 预防：httponly防止劫持cookie；输入检查，对用户的任何输入进行检查，服务器输出检查<br>
-CSRF： 跨站请求伪造，通过劫持cookir骗取服务器信任，以受害者的名义伪造请求发送到攻击的服务器。<br>
+CSRF： 跨站请求伪造，通过劫持cookie骗取服务器信任，以受害者的名义伪造请求发送到攻击的服务器。<br>
 预防：验证码，添加token验证，使用referer check进行源检查（根据检查当前请求的来源Referer来判断是否是CSRF攻击）<br>
 
 ## 前段100问
@@ -422,19 +418,6 @@ post支持标准字符集，可以正确传递中文字符。
 udp:1、不会对不数据报文进行处理，直接输送；2、不仅仅支持1对1的传输，可多对多，一对多的传输；3、可靠性较差，想发就发，无需像TCP一样建立握手链接;4、头部传输小，传输高效，只有8个字节<br/>
 TCP:1、TCP提供全双工通信；2、需要建立握手链接；3、可靠性强；4，仅支持1对1传输
 
-## cdn原理
-CDN做了两件事，一是让用户访问最近的节点，二是从缓存或者源站获取资源。<br>
-用户在首次访问 https://assets-cdn.github.com/pinned-octocat.svg , 假设不委托local DNS服务器递归查询，会经历以下几个过程
-
-1.浏览器检查本地有没有这个东东的有效缓存，有则使用缓存，没有有效缓存则进行对assets-cdn.github.com的DNS查询，获得一个 CNAME记录, igithub.map.fastly.net,值得注意的是，多个加速域名可以解析到同一个CNAME，CDN回源和缓存的时候考虑到了hostname，👍；<br>
-2.进行对github.map.fastly.net的DNS查询，获得一个A/AAAA记录，给出地址103.245.222.133（视网站不同返回的不一样，可以有多个）, 这一步对CDN来说时十分重要的，它给出了离用户最近的边缘节点；<br>
-3.浏览器选一个返回的地址，然后进行真正的http请求，开始向103.245.222.133握手，握手完了把http请求头也发给了该边缘服务器;<br>
-边缘服务器检查自己的cache里面有没有https://assets-cdn.github.com/pinned-octocat.svg这个资源，有则返回给用户，如果没有，向CDN中心服务器发起请求;<br>
-4.CDN中心服务器检查自己的cache里面有没有这个资源，有则返回给边缘服务器，没有则回源;<br>
-5.中心服务器发现客户配置了github.map.fastly.net的回源地址(这个只有cdn会知道，假设是xxx.xxx.xxx.xxx)，就把http请求发到源站地址上，源站返回后返回给请求方;<br>
-![image](../assets/cdn.png)
-
-个人理解：浏览器检查本地有没有当前域名的缓存，有就使用缓存，没有就去通过dns查询获得一个记录，通过查询得到一个最近的边缘节点，，然后浏览器进行一个真正的http请求，边缘服务器铜鼓请求查看请求头的cache里面有没有当前资源，，有就返回，没有的话就把请求发到真正的资源站上，获取最新的资源。
 
 ## 为什么要有reack hook的出现
 根据官方网站的描述，react动机有3点：1、使组件之间复用逻辑变得更加简单，避免代码的冗余，使代码逻辑变得更加清晰；2、将组建相关联的逻辑拆分成更小的部分，忽略了生命周期的操作，但又遵循了原则，易于代码维护；3、避免了使用class去生成组件，通过函数的方式生成组件，使函数组件在非class的情况下也可以拥有更多的react特性
@@ -453,6 +436,7 @@ header('Access-Control-Allow-Credentials: true');<br>
 3. 不能直接修改箭头函数的this指向
 4. 没有自己的arguments
 5. 因为没有this，不能生成构造函数
+6. 不能用于generator函数
 
 ## 什么是JWT
 JSON Web Token（简称 JWT）是目前最流行的跨域认证解决方案。<br>
@@ -601,6 +585,7 @@ https://juejin.im/post/58f94c9bb123db411953691b
 ## 单例模式
 
 ## react diff做了哪些优化
+https://www.jianshu.com/p/398e63dc1969
 
 ## 什么是闭包？
 闭包是指有权访问另外一个函数作用域中的变量的函数。
@@ -626,15 +611,173 @@ https://juejin.im/post/5d43017be51d4561f40adcf9
 
 ## vue nextTick原理
 
-## new的过成功发生了什么
-创建了一个函数
+## new的过程发生了什么
+<!-- 创建了一个函数
 new了一个object对象
 将函数的prototype赋值给已经创建好的object对象的__proto__,
-最后将函数的指向object
+最后将函数的指向object -->
+
+（1）创建一个新对象；
+
+（2）将构造函数的作用域赋给新对象（因此this就指向了这个新对象）；
+
+（3）执行构造函数中的代码（为这个新对象添加属性）；
+
+（4）返回新对象。
 
 ## 函数试编程
  
+## 状态码
  
+## 手写ajax
 
 
+## 分片上传
+https://maimai.cn/article/detail?fid=1396923463&efid=kVl78nb2F1jHZmtshGSPxA&use_rn=1
 
+
+## thunk es6 自动执行
+
+## 一次完整的HTTP请求所经历的7个步骤
+1. 建立TCP连接<br>
+2. Web浏览器向Web服务器发送请求命令<br>
+3. Web浏览器发送请求头信息<br>
+4. Web服务器应答<br>
+5. Web服务器发送应答头信息<br>
+6. Web服务器向浏览器发送数据<br>
+7. Web服务器关闭TCP连接<br>
+https://www.cnblogs.com/linjiqin/p/3560152.html
+
+## 用 TypeScript 的原因
+JavaScript 是一门弱类型语言，变量的数据类型具有动态性，只有执行时才能确定变量的类型，无益于编程能力的提升，还会降低开发效率。TypeScript 的类型机制可以有效杜绝由变量类型引起的误用问题
+https://juejin.im/post/5958fdd7f265da6c40735085#heading-1
+
+## 静态与动态类型
+静态类型语言中，变量具有类型，而且在编译期确定，具有某一类型的变量只能持有相同类型的数据。动态类型语言中，变量没有类型，只有数据有类型，变量可以持有任意类型的数据
+
+## Iterator的语法，它的作用是什么
+Iterator 的作用有三个：<br>
+为各种数据结构，提供一个统一的、简便的访问接口；<br>
+使得数据结构的成员能够按某种次序排列；<br>
+ES6 创造了一种新的遍历命令for…of循环，Iterator 接口主要供for…of消费。<br>
+
+## 设计一个好的通用组件
+1. 要易用 (至少让使用者能够简单方便的引入到程序当中）
+2. 要稳定 (需要增加关键的测试）
+3. 要灵活（关键参数可配置）
+4. 要全面（日志、拦截器、监听器）
+5. 要谨慎（要考虑多种情况）
+6. 要易读（写的东西要能给别人讲清楚）
+
+## 0.1+0.2为什么不等于0.3
+浮点精度问题，二精制不能正确计算出0.3,<br>
+可通过先转成整型，再计算，<br>
+也可通过 Number.EPSILON
+    function numbersequal(a,b){ return Math.abs(a-b)<Number.EPSILON;
+    } 
+    var a=0.1+0.2， b=0.3;
+    console.log(numbersequal(a,b)); //true
+
+## ['1', '2', '3'].map(parseInt) what & why ?
+
+ //  parseInt('1', 0) -> 1   radix 为 0，parseInt() 会根据十进制来解析，所以结果为 1；
+  //  parseInt('2', 1) -> radix 为 1，超出区间范围2-36，所以结果为 NaN；
+  //  parseInt('3', 2) -> NaN radix 为 2，用2进制来解析，应以 0 和 1 开头，所以结果为 NaN。
+
+  // 因为parseInt接收两个参数，所以结果为 [1, NaN, NaN]
+
+
+## react生命周期
+1. 挂载卸载过程<br>
+1.1.constructor()<br>
+1.2.componentWillMount()<br>
+1.3.componentDidMount()<br>
+1.4.componentWillUnmount ()<br>
+2. 更新过程<br>
+2.1. componentWillReceiveProps (nextProps)<br>
+2.2.shouldComponentUpdate(nextProps,nextState)<br>
+2.3.componentWillUpdate (nextProps,nextState)<br>
+2.4.componentDidUpdate(prevProps,prevState)<br>
+2.5.render()<br>
+
+
+## v8的垃圾回收机制
+https://www.cnblogs.com/qianbin/p/10425213.html
+
+## for in 和for of 区别
+https://www.jianshu.com/p/c43f418d6bf0
+
+## nextTick原理
+  https://www.cnblogs.com/liuhao-web/p/8919623.html
+
+## prototype和__proto__的区别
+1.每个对象都具有一个名为__proto__的属性；<br>
+2.每个构造函数（构造函数标准为大写开头，如Function()，Object()等等JS中自带的构造函数，以及自己创建的）都具有一个名为prototype的方法（注意：既然是方法，那么就是一个对象（JS中函数同样是对象），所以prototype同样带有__proto__属性）；<br>
+3.每个对象的__proto__属性指向自身构造函数的prototype；<br>
+
+## 路由懒加载原理
+结合 Vue 的异步组件和 Webpack 的代码分割功能，轻松实现路由组件的懒加载。
+
+## 为什么要用 WebSocket
+使用传统的 HTTP 轮询或者长连接的方式也可以实现类似服务器推送的效果，但是这类方式都存在资源消耗过大或推送延迟等问题。而 WebSocket 直接使用 TCP 连接保持全双工的传输，可以有效地减少连接的建立，实现真正的服务器通信，对于有低延迟有要求的应用是一个很好的选择。
+
+## SSR怎么保证数据的同步
+可以把客户端的数据当作一个整体，然后用MD5对它进行加密，服务器端也一样，这样，当他们的MD5值不一样时就能判断出他们的数据不同步了。然后再通过其他的方法把不同的部分上传或下载下来
+
+## 判断数组的方法
+1.Array.isArray()<br>
+2.Object.prototype.toString.call()<br>
+3instanceof<br>
+4.判断constructor，obj.constructor == 'Array'<br>
+
+## parseInt()与Number()区别
+https://www.cnblogs.com/xiao-baobao/p/10158516.html
+
+## js基础类型与引用类型，以及区别
+https://www.cnblogs.com/liu-di/p/11209993.html
+
+## bind,call,apply区别
+bind改变this指针，但并不会立刻执行，call,apply,改变this指针的同时，会立刻执行，call的性能比apply较好
+https://www.jianshu.com/p/015f9f15d6b3
+https://blog.csdn.net/M_Jin/article/details/104838633
+
+## ***原型链
+ 简单的回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。那么假如我们让原型对象等于另一个类型的实例，结果会怎样？显然，此时的原型对象将包含一个指向另一个原型的指针，相应地，另一个原型中也包含着一个指向另一个构造函数的指针。假如另一个原型又是另一个类型的实例，那么上述关系依然成立。如此层层递进，就构成了实例与原型的链条。这就是所谓的原型链的基本概念。——摘自《javascript高级程序设计》
+ https://www.cnblogs.com/loveyaxin/p/11151586.html
+
+ ## ***cdn原理
+CDN做了两件事，一是让用户访问最近的节点，二是从缓存或者源站获取资源。<br>
+用户在首次访问 https://assets-cdn.github.com/pinned-octocat.svg , 假设不委托local DNS服务器递归查询，会经历以下几个过程
+
+1.浏览器检查本地有没有这个东东的有效缓存，有则使用缓存，没有有效缓存则进行对assets-cdn.github.com的DNS查询，获得一个 CNAME记录, igithub.map.fastly.net,值得注意的是，多个加速域名可以解析到同一个CNAME，CDN回源和缓存的时候考虑到了hostname，👍；<br>
+2.进行对github.map.fastly.net的DNS查询，获得一个A/AAAA记录，给出地址103.245.222.133（视网站不同返回的不一样，可以有多个）, 这一步对CDN来说时十分重要的，它给出了离用户最近的边缘节点；<br>
+3.浏览器选一个返回的地址，然后进行真正的http请求，开始向103.245.222.133握手，握手完了把http请求头也发给了该边缘服务器;<br>
+边缘服务器检查自己的cache里面有没有https://assets-cdn.github.com/pinned-octocat.svg这个资源，有则返回给用户，如果没有，向CDN中心服务器发起请求;<br>
+4.CDN中心服务器检查自己的cache里面有没有这个资源，有则返回给边缘服务器，没有则回源;<br>
+5.中心服务器发现客户配置了github.map.fastly.net的回源地址(这个只有cdn会知道，假设是xxx.xxx.xxx.xxx)，就把http请求发到源站地址上，源站返回后返回给请求方;<br>
+![image](../assets/cdn.png)
+
+个人理解：浏览器检查本地有没有当前域名的缓存，有就使用缓存，没有就去通过dns查询获得一个记录，通过查询得到一个最近的边缘节点，，然后浏览器进行一个真正的http请求，边缘服务器铜鼓请求查看请求头的cache里面有没有当前资源，，有就返回，没有的话就把请求发到真正的资源站上，获取最新的资源。
+
+## ***什么是https
+在请求前，会建立ssl链接，确保接下来的通信都是加密的，无法被轻易截取分析<br>
+主要使用了，对称加密和非对称加密<br>
+数字证书认证机构（Certificate Authority，简称 CA）生成一对公/私钥；<br>
+服务器将自己的域名、公钥等信息提交给 CA 审查；<br>
+CA 审查无误，使用私钥把服务器信息的摘要加密，生成的密文就是所谓签名（Signature）；<br>
+CA 把服务器的信息、签名、有效期等信息集合到一张证书上，颁发给服务器；<br>
+客户端收到服务器发送的证书后，使用 CA 的公钥解密签名，获得服务器信息的摘要，如果和证书上记录的服务器信息的摘要一致，说明服务器信息是经过 CA 认可的<br>
+https://juejin.im/post/592d23630ce46300579882b4
+
+## ***webpack热更新
+启动webpack，生成compiler实例，启动server，创建websocket；启动服务前，entry新增两个文件，一个client/index，为socket通信代码，,一个hot/dev_server.js，主要是用于检查更新逻辑的，通过webpack-dev-server这个钩子，往前端发送最新的文件更新消息，告诉浏览器有文件已修改，触发两个事件，hash（更新最新一次打包后的hash值）和on事件（进行热更新检查），webpack-dev-middleware负责文件变化监听，主要是通过compiler.watch去监听，出发事件，客户端接收到新的hash会进行jsonp请求新的资源，新的请求资源请求到之后，hotModuleReplacementPlugin插件将需要新的运行的代码注入到打包后的文件，热更新的核心方法hotApply，删除需要替换的模块，将新的模块添加到modules中，通过__webpack_require__执行相关模块代码。<br>
+[链接](https://juejin.im/post/5de0cfe46fb9a071665d3df0)<br>
+https://zhuanlan.zhihu.com/p/30669007
+![image](../assets/HRM.png)
+
+## ***说说浏览器和 Node 事件循环的区别 
+[https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/26](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/26)<br/>
+https://juejin.im/post/5c337ae06fb9a049bc4cd218#heading-12<br/>
+浏览器执行顺序：<br/>
+当某个宏任务执行完后,会查看是否有微任务队列。如果有，先执行微任务队列中的所有任务，如果没有，会读取宏任务队列中排在最前的任务，执行宏任务的过程中，遇到微任务，依次加入微任务队列。栈空后，再次读取微任务队列里的任务，依次类推。<br/>
+浏览器环境下，microtask的任务队列是每个macrotask执行完之后执行。而在Node.js中，microtask会在事件循环的各个阶段之间执行，也就是一个阶段执行完毕，就会去执行microtask队列的任务。
