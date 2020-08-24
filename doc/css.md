@@ -12,7 +12,7 @@
 1.html跟元素
 2.float
 3.absolute
-4.overflow不为visible，
+4.overflow不为visible
 5.table布局，flex布局
 
 解决了什么问题：
